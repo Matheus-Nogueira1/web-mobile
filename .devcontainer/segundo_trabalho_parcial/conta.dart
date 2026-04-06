@@ -13,7 +13,7 @@ void main() {
     return;
   }
   double custoMensal;
-  if (consumoNumerico <= 100) {
+  if (consumoNumerico <= 100)
     custoMensal = 0.80;
   } else if (consumoNumerico > 100 && consumoNumerico <= 300) {
     custoMensal = 1.10;
