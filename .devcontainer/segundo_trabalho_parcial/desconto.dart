@@ -1,34 +1,74 @@
 import 'dart:io';
 
+const nomeRegioes = {
+  '1': 'Norte',
+  '2': 'Sul',
+  '3': 'Sudeste',
+  '4': 'Nordeste',
+  '5': 'Centro-Oeste',
+};
+
+const descontoRegioes = {
+  '1': 5.0,
+  '2': 15.0,
+  '3': 7.0,
+  '4': 12.0,
+  '5': 20.0,
+};
+
 void main() {
-  stdout.write('Qual o preço do produto? ');
-  String? valor = stdin.readLineSync();
-  if (valor == null || valor.isEmpty) {
-    stdout.write('O campo preço é obrigatório!\n');
-    return;
+  final preco = _readPositiveDouble('Qual o preço do produto? ');
+  if (preco == null) return;
+
+  final regiao = _readRegion();
+  if (regiao == null) return;
+
+  final descontoPercentual = descontoRegioes[regiao] ?? 0.0;
+  final descontoValor = preco * (descontoPercentual / 100);
+  final precoFinal = preco - descontoValor;
+
+  stdout.writeln('Região: ${nomeRegioes[regiao] ?? 'Importado'}');
+  stdout.writeln('Preço original: R\$ ${preco.toStringAsFixed(2)}');
+  stdout.writeln('Desconto: R\$ ${descontoValor.toStringAsFixed(2)} (${descontoPercentual.toStringAsFixed(1)}%)');
+  stdout.writeln('Preço final: R\$ ${precoFinal.toStringAsFixed(2)}');
+}
+
+double? _readPositiveDouble(String prompt) {
+  stdout.write(prompt);
+  final input = stdin.readLineSync();
+  if (input == null || input.isEmpty) {
+    stdout.writeln('O campo preço é obrigatório!');
+    return null;
   }
-  double? preco = double.tryParse(valor);
+
+  final preco = double.tryParse(input.replaceAll(',', '.'));
   if (preco == null || preco <= 0) {
-    stdout.write('Por favor, insira um preço válido maior que zero.\n');
-    return;
+    stdout.writeln('Por favor, insira um preço válido maior que zero.');
+    return null;
   }
 
-  stdout.write('Qual a porcentagem de desconto? ');
-  String? descontoInput = stdin.readLineSync();
-  if (descontoInput == null || descontoInput.isEmpty) {
-    stdout.write('O campo desconto é obrigatório!\n');
-    return;
-  }
-  double? descontoPercentual = double.tryParse(descontoInput);
-  if (descontoPercentual == null || descontoPercentual < 0 || descontoPercentual > 100) {
-    stdout.write('Por favor, insira uma porcentagem de desconto válida (0-100).\n');
-    return;
+  return preco;
+}
+
+String? _readRegion() {
+  stdout.writeln('Qual sua região?');
+  stdout.writeln('1 - Norte');
+  stdout.writeln('2 - Sul');
+  stdout.writeln('3 - Sudeste');
+  stdout.writeln('4 - Nordeste');
+  stdout.writeln('5 - Centro-Oeste');
+  stdout.write('Digite o número da região: ');
+
+  final input = stdin.readLineSync();
+  if (input == null || input.isEmpty) {
+    stdout.writeln('O campo região é obrigatório!');
+    return null;
   }
 
-  double descontoValor = preco * (descontoPercentual / 100);
-  double precoFinal = preco - descontoValor;
+  if (!descontoRegioes.containsKey(input)) {
+    stdout.writeln('Região inválida. Nenhum desconto será aplicado.');
+    return null;
+  }
 
-  stdout.write('Preço original: R\$ ${preco.toStringAsFixed(2)}\n');
-  stdout.write('Desconto: R\$ ${descontoValor.toStringAsFixed(2)} (${descontoPercentual}%)\n');
-  stdout.write('Preço final: R\$ ${precoFinal.toStringAsFixed(2)}\n');
+  return input;
 }
