@@ -12,18 +12,23 @@ void main() {
     stdout.write('Por favor, insira um consumo válido maior que zero.\n');
     return;
   }
-  double custoMensal;
-  if (consumoNumerico <= 100)
-    custoMensal = 0.80;
+  double tarifa;
+  if (consumoNumerico <= 100) {
+    tarifa = 0.80;
   } else if (consumoNumerico > 100 && consumoNumerico <= 300) {
-    custoMensal = 1.10;
+    tarifa = 1.10;
   } else if (consumoNumerico > 300 && consumoNumerico <= 500) {
-    custoMensal = 1.40;
+    tarifa = 1.40;
   } else {
-    custoMensal = 1.80;
+    tarifa = 1.80;
   }
+
+  double custoMensal = consumoNumerico * tarifa;
+
   stdout.write('Consumo: ${consumoNumerico.toStringAsFixed(2)} kWh\n');
   stdout.write('O custo a ser pago é: R\$ ${custoMensal.toStringAsFixed(2)}\n');
-  stdout.write('Consumo líquido após custo: R\$ ${(consumoNumerico - custoMensal).toStringAsFixed(2)}\n');
+  stdout.write(
+    'Consumo líquido após custo: R\$ ${(consumoNumerico - custoMensal).toStringAsFixed(2)}\n',
+  );
   return;
 }
