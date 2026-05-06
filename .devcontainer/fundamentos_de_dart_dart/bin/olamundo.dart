@@ -1,7 +1,7 @@
 Class OlaMundoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return OlaMundoApp(
       title: 'Olá Mundo',
       home: Scaffold(
         appBar: AppBar(
