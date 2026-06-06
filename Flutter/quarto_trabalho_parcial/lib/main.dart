@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: const Color(0xFF1E3A8A),
             foregroundColor: Colors.white,
             elevation: 2,
-            shadowColor: const Color(0xFF1E3A8A).withOpacity(0.3),
+            shadowColor: const Color(0xFF1E3A8A).withValues(alpha: 0.3),
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 0.5),
@@ -382,7 +382,7 @@ class _TelaSelecaoCursoState extends State<TelaSelecaoCurso> {
             const SizedBox(height: 20),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Selecione o Curso', prefixIcon: Icon(Icons.book_outlined)),
-              value: _cursoSelecionado,
+              initialValue: _cursoSelecionado,
               items: _cursos.map((String curso) {
                 return DropdownMenuItem<String>(value: curso, child: Text(curso));
               }).toList(),
@@ -450,7 +450,7 @@ class _TelaMatrulaCompletaState extends State<TelaMatrulaCompleta> {
             const SizedBox(height: 20),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Curso Escolhido', prefixIcon: Icon(Icons.assignment_outlined)),
-              value: _curso,
+              initialValue: _curso,
               items: _cursos.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
               onChanged: (v) => setState(() => _curso = v),
             ),
