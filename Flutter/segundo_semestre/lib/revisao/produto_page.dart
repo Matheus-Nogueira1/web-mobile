@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProdutoPage extends StatefulWidget {
+  const ProdutoPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return ProdutoState();

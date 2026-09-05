@@ -83,7 +83,7 @@ class _TemperaturaPageState extends State<TemperaturaPage> {
                     const SizedBox(height: 20),
 
                     DropdownButtonFormField<String>(
-                      value: opcaoSelecionada,
+                      initialValue: opcaoSelecionada,
                       decoration: const InputDecoration(
                         labelText: 'Conversão',
                       ),

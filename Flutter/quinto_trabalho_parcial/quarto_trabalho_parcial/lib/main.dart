@@ -194,7 +194,7 @@ class _CalculadoraIMCState extends State<CalculadoraIMC> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: corClassificacao().withOpacity(0.15),
+                          color: corClassificacao().withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
