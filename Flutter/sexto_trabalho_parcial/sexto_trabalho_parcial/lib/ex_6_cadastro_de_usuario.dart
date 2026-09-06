@@ -1,78 +1,72 @@
 import 'package:flutter/material.dart';
 
-class CadastroVeiculo extends StatefulWidget {
-	const CadastroVeiculo({super.key});
+class CadastroUsuario extends StatefulWidget {
+	const CadastroUsuario({super.key});
 
 	@override
-	State<CadastroVeiculo> createState() => _CadastroVeiculoState();
+	State<CadastroUsuario> createState() => _CadastroUsuarioState();
 }
 
-class _CadastroVeiculoState extends State<CadastroVeiculo> {
-	final TextEditingController marcaController = TextEditingController();
-	final TextEditingController modeloController = TextEditingController();
-	final TextEditingController anoController = TextEditingController();
-	final TextEditingController precoController = TextEditingController();
+class _CadastroUsuarioState extends State<CadastroUsuario> {
+	final TextEditingController nomeController = TextEditingController();
+	final TextEditingController emailController = TextEditingController();
+	final TextEditingController senhaController = TextEditingController();
+	final TextEditingController confirmarSenhaController =
+		TextEditingController();
 
 	String mensagem = '';
 	bool sucesso = false;
 
 	@override
 	void dispose() {
-		marcaController.dispose();
-		modeloController.dispose();
-		anoController.dispose();
-		precoController.dispose();
+		nomeController.dispose();
+		emailController.dispose();
+		senhaController.dispose();
+		confirmarSenhaController.dispose();
 		super.dispose();
 	}
 
 	void salvar() {
-		String marca = marcaController.text.trim();
-		String modelo = modeloController.text.trim();
-		String anoTexto = anoController.text.trim();
-		String precoTexto = precoController.text.trim();
+		String nome = nomeController.text.trim();
+		String email = emailController.text.trim();
+		String senha = senhaController.text.trim();
+		String confirmarSenha = confirmarSenhaController.text.trim();
 
 		String erro = '';
 
-		if (marca.isEmpty) {
-			erro = 'Informe a marca.';
-		} else if (marca.length < 2 || marca.length > 50) {
-			erro = 'A marca deve ter entre 2 e 50 caracteres.';
-		} else if (modelo.isEmpty) {
-			erro = 'Informe o modelo.';
-		} else if (modelo.length < 2 || modelo.length > 50) {
-			erro = 'O modelo deve ter entre 2 e 50 caracteres.';
-		} else if (anoTexto.isEmpty) {
-			erro = 'Informe o ano.';
+		if (nome.isEmpty) {
+			erro = 'Informe o nome.';
+		} else if (nome.length < 3 || nome.length > 50) {
+			erro = 'O nome deve ter entre 3 e 50 caracteres.';
+		} else if (email.isEmpty) {
+			erro = 'Informe o e-mail.';
+		} else if (!email.contains('@')) {
+			erro = 'O e-mail deve conter @.';
 		} else {
-			int? ano = int.tryParse(anoTexto);
+			int posicaoArroba = email.indexOf('@');
+			String depoisDoArroba =
+				email.substring(posicaoArroba + 1);
 
-			if (ano == null) {
-				erro = 'O ano deve ser um número inteiro.';
-			} else if (ano < 1900 || ano > 2026) {
-				erro = 'O ano deve estar entre 1900 e 2026.';
+			if (!depoisDoArroba.contains('.')) {
+				erro = 'O e-mail deve conter um ponto após o @.';
 			}
 		}
 
 		if (erro.isEmpty) {
-			if (precoTexto.isEmpty) {
-				erro = 'Informe o preço.';
-			} else {
-				String precoNormalizado = precoTexto.replaceAll(',', '.');
-				double? preco = double.tryParse(precoNormalizado);
-
-				if (preco == null) {
-					erro = 'O preço deve ser um número válido.';
-				} else if (!RegExp(r'^\d+([,.]\d{1,2})?$').hasMatch(precoTexto)) {
-					erro = 'O preço pode ter no máximo 2 casas decimais.';
-				} else if (preco < 1000 || preco > 1000000) {
-					erro = 'O preço deve estar entre R\$ 1.000 e R\$ 1.000.000.';
-				}
+			if (senha.isEmpty) {
+				erro = 'Informe a senha.';
+			} else if (senha.length < 6 || senha.length > 20) {
+				erro = 'A senha deve ter entre 6 e 20 caracteres.';
+			} else if (confirmarSenha.isEmpty) {
+				erro = 'Confirme a senha.';
+			} else if (senha != confirmarSenha) {
+				erro = 'As senhas não são iguais.';
 			}
 		}
 
 		setState(() {
 			if (erro.isEmpty) {
-				mensagem = 'Veículo salvo com sucesso';
+				mensagem = 'Usuário cadastrado com sucesso';
 				sucesso = true;
 			} else {
 				mensagem = erro;
@@ -85,16 +79,21 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 		String label,
 		IconData icone,
 		TextEditingController controller, {
+		bool senha = false,
 		TextInputType teclado = TextInputType.text,
 	}) {
 		return Padding(
 			padding: const EdgeInsets.only(bottom: 14),
 			child: TextField(
 				controller: controller,
+				obscureText: senha,
 				keyboardType: teclado,
 				decoration: InputDecoration(
 					labelText: label,
-					prefixIcon: Icon(icone, color: Colors.blue.shade700),
+					prefixIcon: Icon(
+						icone,
+						color: Colors.green.shade700,
+					),
 					filled: true,
 					fillColor: Colors.white.withOpacity(0.72),
 					border: OutlineInputBorder(
@@ -113,7 +112,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 				children: [
 					Positioned.fill(
 						child: Image.asset(
-							'assets/fundo_veiculo.jpg',
+							'assets/fundo_usuario.jpg',
 							fit: BoxFit.cover,
 						),
 					),
@@ -146,13 +145,13 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 									child: Column(
 										children: [
 											const Icon(
-												Icons.directions_car_rounded,
+												Icons.person_add_rounded,
 												size: 58,
-												color: Color(0xFF1565C0),
+												color: Color(0xFF2E7D32),
 											),
 											const SizedBox(height: 10),
 											const Text(
-												'Cadastro de Veículo',
+												'Cadastro de Usuário',
 												style: TextStyle(
 													fontSize: 26,
 													fontWeight: FontWeight.bold,
@@ -161,42 +160,39 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 											),
 											const SizedBox(height: 22),
 											campo(
-												'Marca',
-												Icons.branding_watermark,
-												marcaController,
+												'Nome',
+												Icons.person_outline,
+												nomeController,
 											),
 											campo(
-												'Modelo',
-												Icons.directions_car,
-												modeloController,
-											),
-											campo(
-												'Ano',
-												Icons.calendar_today,
-												anoController,
-												teclado: TextInputType.number,
-											),
-											campo(
-												'Preço',
-												Icons.attach_money,
-												precoController,
+												'E-mail',
+												Icons.email_outlined,
+												emailController,
 												teclado:
-													const TextInputType
-														.numberWithOptions(
-													decimal: true,
-												),
+													TextInputType.emailAddress,
 											),
-											const SizedBox(height: 5),
+											campo(
+												'Senha',
+												Icons.lock_outline,
+												senhaController,
+												senha: true,
+											),
+											campo(
+												'Confirmar senha',
+												Icons.lock_reset,
+												confirmarSenhaController,
+												senha: true,
+											),
 											SizedBox(
 												width: double.infinity,
 												height: 52,
 												child: ElevatedButton.icon(
 													onPressed: salvar,
 													icon: const Icon(
-														Icons.save_rounded,
+														Icons.person_add_rounded,
 													),
 													label: const Text(
-														'Salvar veículo',
+														'Cadastrar usuário',
 														style: TextStyle(
 															fontSize: 16,
 															fontWeight:
@@ -206,7 +202,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 													style: ElevatedButton.styleFrom(
 														backgroundColor:
 															const Color(
-																0xFF1565C0,
+																0xFF2E7D32,
 															),
 														foregroundColor:
 															Colors.white,

@@ -1,78 +1,58 @@
 import 'package:flutter/material.dart';
 
-class CadastroVeiculo extends StatefulWidget {
-	const CadastroVeiculo({super.key});
+class CadastroFilme extends StatefulWidget {
+	const CadastroFilme({super.key});
 
 	@override
-	State<CadastroVeiculo> createState() => _CadastroVeiculoState();
+	State<CadastroFilme> createState() => _CadastroFilmeState();
 }
 
-class _CadastroVeiculoState extends State<CadastroVeiculo> {
-	final TextEditingController marcaController = TextEditingController();
-	final TextEditingController modeloController = TextEditingController();
-	final TextEditingController anoController = TextEditingController();
-	final TextEditingController precoController = TextEditingController();
+class _CadastroFilmeState extends State<CadastroFilme> {
+	final TextEditingController nomeController = TextEditingController();
+	final TextEditingController dataController = TextEditingController();
+	final TextEditingController duracaoController = TextEditingController();
 
 	String mensagem = '';
 	bool sucesso = false;
 
 	@override
 	void dispose() {
-		marcaController.dispose();
-		modeloController.dispose();
-		anoController.dispose();
-		precoController.dispose();
+		nomeController.dispose();
+		dataController.dispose();
+		duracaoController.dispose();
 		super.dispose();
 	}
 
 	void salvar() {
-		String marca = marcaController.text.trim();
-		String modelo = modeloController.text.trim();
-		String anoTexto = anoController.text.trim();
-		String precoTexto = precoController.text.trim();
+		String nome = nomeController.text.trim();
+		String data = dataController.text.trim();
+		String duracaoTexto = duracaoController.text.trim();
 
 		String erro = '';
 
-		if (marca.isEmpty) {
-			erro = 'Informe a marca.';
-		} else if (marca.length < 2 || marca.length > 50) {
-			erro = 'A marca deve ter entre 2 e 50 caracteres.';
-		} else if (modelo.isEmpty) {
-			erro = 'Informe o modelo.';
-		} else if (modelo.length < 2 || modelo.length > 50) {
-			erro = 'O modelo deve ter entre 2 e 50 caracteres.';
-		} else if (anoTexto.isEmpty) {
-			erro = 'Informe o ano.';
+		if (nome.isEmpty) {
+			erro = 'Informe o nome do filme.';
+		} else if (nome.length < 2 || nome.length > 100) {
+			erro = 'O nome deve ter entre 2 e 100 caracteres.';
+		} else if (data.isEmpty) {
+			erro = 'Informe a data.';
+		} else if (!RegExp(r'^\d{2}/\d{2}/\d{4}$').hasMatch(data)) {
+			erro = 'A data deve estar no formato DD/MM/AAAA.';
+		} else if (duracaoTexto.isEmpty) {
+			erro = 'Informe a duração.';
 		} else {
-			int? ano = int.tryParse(anoTexto);
+			int? duracao = int.tryParse(duracaoTexto);
 
-			if (ano == null) {
-				erro = 'O ano deve ser um número inteiro.';
-			} else if (ano < 1900 || ano > 2026) {
-				erro = 'O ano deve estar entre 1900 e 2026.';
-			}
-		}
-
-		if (erro.isEmpty) {
-			if (precoTexto.isEmpty) {
-				erro = 'Informe o preço.';
-			} else {
-				String precoNormalizado = precoTexto.replaceAll(',', '.');
-				double? preco = double.tryParse(precoNormalizado);
-
-				if (preco == null) {
-					erro = 'O preço deve ser um número válido.';
-				} else if (!RegExp(r'^\d+([,.]\d{1,2})?$').hasMatch(precoTexto)) {
-					erro = 'O preço pode ter no máximo 2 casas decimais.';
-				} else if (preco < 1000 || preco > 1000000) {
-					erro = 'O preço deve estar entre R\$ 1.000 e R\$ 1.000.000.';
-				}
+			if (duracao == null) {
+				erro = 'A duração deve ser um número inteiro.';
+			} else if (duracao < 1 || duracao > 500) {
+				erro = 'A duração deve estar entre 1 e 500 minutos.';
 			}
 		}
 
 		setState(() {
 			if (erro.isEmpty) {
-				mensagem = 'Veículo salvo com sucesso';
+				mensagem = 'Filme salvo com sucesso';
 				sucesso = true;
 			} else {
 				mensagem = erro;
@@ -94,7 +74,10 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 				keyboardType: teclado,
 				decoration: InputDecoration(
 					labelText: label,
-					prefixIcon: Icon(icone, color: Colors.blue.shade700),
+					prefixIcon: Icon(
+						icone,
+						color: Colors.deepPurple.shade700,
+					),
 					filled: true,
 					fillColor: Colors.white.withOpacity(0.72),
 					border: OutlineInputBorder(
@@ -113,7 +96,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 				children: [
 					Positioned.fill(
 						child: Image.asset(
-							'assets/fundo_veiculo.jpg',
+							'assets/fundo_filme.jpg',
 							fit: BoxFit.cover,
 						),
 					),
@@ -146,13 +129,13 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 									child: Column(
 										children: [
 											const Icon(
-												Icons.directions_car_rounded,
+												Icons.movie_rounded,
 												size: 58,
-												color: Color(0xFF1565C0),
+												color: Color(0xFF6A1B9A),
 											),
 											const SizedBox(height: 10),
 											const Text(
-												'Cadastro de Veículo',
+												'Cadastro de Filme',
 												style: TextStyle(
 													fontSize: 26,
 													fontWeight: FontWeight.bold,
@@ -161,32 +144,21 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 											),
 											const SizedBox(height: 22),
 											campo(
-												'Marca',
-												Icons.branding_watermark,
-												marcaController,
+												'Nome do filme',
+												Icons.movie_outlined,
+												nomeController,
 											),
 											campo(
-												'Modelo',
-												Icons.directions_car,
-												modeloController,
+												'Data (DD/MM/AAAA)',
+												Icons.calendar_month,
+												dataController,
 											),
 											campo(
-												'Ano',
-												Icons.calendar_today,
-												anoController,
+												'Duração em minutos',
+												Icons.timer_outlined,
+												duracaoController,
 												teclado: TextInputType.number,
 											),
-											campo(
-												'Preço',
-												Icons.attach_money,
-												precoController,
-												teclado:
-													const TextInputType
-														.numberWithOptions(
-													decimal: true,
-												),
-											),
-											const SizedBox(height: 5),
 											SizedBox(
 												width: double.infinity,
 												height: 52,
@@ -196,7 +168,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 														Icons.save_rounded,
 													),
 													label: const Text(
-														'Salvar veículo',
+														'Salvar filme',
 														style: TextStyle(
 															fontSize: 16,
 															fontWeight:
@@ -206,7 +178,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 													style: ElevatedButton.styleFrom(
 														backgroundColor:
 															const Color(
-																0xFF1565C0,
+																0xFF6A1B9A,
 															),
 														foregroundColor:
 															Colors.white,

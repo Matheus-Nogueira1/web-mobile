@@ -1,78 +1,100 @@
 import 'package:flutter/material.dart';
 
-class CadastroVeiculo extends StatefulWidget {
-	const CadastroVeiculo({super.key});
+class CadastroEvento extends StatefulWidget {
+	const CadastroEvento({super.key});
 
 	@override
-	State<CadastroVeiculo> createState() => _CadastroVeiculoState();
+	State<CadastroEvento> createState() => _CadastroEventoState();
 }
 
-class _CadastroVeiculoState extends State<CadastroVeiculo> {
-	final TextEditingController marcaController = TextEditingController();
-	final TextEditingController modeloController = TextEditingController();
-	final TextEditingController anoController = TextEditingController();
-	final TextEditingController precoController = TextEditingController();
+class _CadastroEventoState extends State<CadastroEvento> {
+	final TextEditingController nomeController = TextEditingController();
+	final TextEditingController quantidadeMinController =
+		TextEditingController();
+	final TextEditingController quantidadeMaxController =
+		TextEditingController();
+	final TextEditingController valorController = TextEditingController();
 
 	String mensagem = '';
 	bool sucesso = false;
 
 	@override
 	void dispose() {
-		marcaController.dispose();
-		modeloController.dispose();
-		anoController.dispose();
-		precoController.dispose();
+		nomeController.dispose();
+		quantidadeMinController.dispose();
+		quantidadeMaxController.dispose();
+		valorController.dispose();
 		super.dispose();
 	}
 
 	void salvar() {
-		String marca = marcaController.text.trim();
-		String modelo = modeloController.text.trim();
-		String anoTexto = anoController.text.trim();
-		String precoTexto = precoController.text.trim();
+		String nome = nomeController.text.trim();
+		String minTexto = quantidadeMinController.text.trim();
+		String maxTexto = quantidadeMaxController.text.trim();
+		String valorTexto = valorController.text.trim();
 
 		String erro = '';
 
-		if (marca.isEmpty) {
-			erro = 'Informe a marca.';
-		} else if (marca.length < 2 || marca.length > 50) {
-			erro = 'A marca deve ter entre 2 e 50 caracteres.';
-		} else if (modelo.isEmpty) {
-			erro = 'Informe o modelo.';
-		} else if (modelo.length < 2 || modelo.length > 50) {
-			erro = 'O modelo deve ter entre 2 e 50 caracteres.';
-		} else if (anoTexto.isEmpty) {
-			erro = 'Informe o ano.';
-		} else {
-			int? ano = int.tryParse(anoTexto);
+		int? quantidadeMin;
+		int? quantidadeMax;
 
-			if (ano == null) {
-				erro = 'O ano deve ser um número inteiro.';
-			} else if (ano < 1900 || ano > 2026) {
-				erro = 'O ano deve estar entre 1900 e 2026.';
+		if (nome.isEmpty) {
+			erro = 'Informe o nome do evento.';
+		} else if (nome.length < 5 || nome.length > 100) {
+			erro = 'O nome deve ter entre 5 e 100 caracteres.';
+		} else if (minTexto.isEmpty) {
+			erro = 'Informe a quantidade mínima.';
+		} else {
+			quantidadeMin = int.tryParse(minTexto);
+
+			if (quantidadeMin == null) {
+				erro = 'A quantidade mínima deve ser um número inteiro.';
+			} else if (quantidadeMin < 1) {
+				erro = 'A quantidade mínima deve ser pelo menos 1.';
 			}
 		}
 
 		if (erro.isEmpty) {
-			if (precoTexto.isEmpty) {
-				erro = 'Informe o preço.';
+			if (maxTexto.isEmpty) {
+				erro = 'Informe a quantidade máxima.';
 			} else {
-				String precoNormalizado = precoTexto.replaceAll(',', '.');
-				double? preco = double.tryParse(precoNormalizado);
+				quantidadeMax = int.tryParse(maxTexto);
 
-				if (preco == null) {
-					erro = 'O preço deve ser um número válido.';
-				} else if (!RegExp(r'^\d+([,.]\d{1,2})?$').hasMatch(precoTexto)) {
-					erro = 'O preço pode ter no máximo 2 casas decimais.';
-				} else if (preco < 1000 || preco > 1000000) {
-					erro = 'O preço deve estar entre R\$ 1.000 e R\$ 1.000.000.';
+				if (quantidadeMax == null) {
+					erro = 'A quantidade máxima deve ser um número inteiro.';
+				} else if (quantidadeMax < 1 ||
+					quantidadeMax > 50000) {
+					erro =
+						'A quantidade máxima deve estar entre 1 e 50.000.';
+				} else if (quantidadeMin != null &&
+					quantidadeMax < quantidadeMin) {
+					erro =
+						'A quantidade máxima não pode ser menor que a mínima.';
+				}
+			}
+		}
+
+		if (erro.isEmpty) {
+			if (valorTexto.isEmpty) {
+				erro = 'Informe o valor do ingresso.';
+			} else {
+				String valorNormalizado = valorTexto.replaceAll(',', '.');
+				double? valor = double.tryParse(valorNormalizado);
+
+				if (valor == null) {
+					erro = 'O valor deve ser um número válido.';
+				} else if (!RegExp(r'^\d+([,.]\d{1,2})?$')
+					.hasMatch(valorTexto)) {
+					erro = 'O valor pode ter no máximo 2 casas decimais.';
+				} else if (valor < 0 || valor > 10000) {
+					erro = 'O valor deve estar entre R\$ 0 e R\$ 10.000.';
 				}
 			}
 		}
 
 		setState(() {
 			if (erro.isEmpty) {
-				mensagem = 'Veículo salvo com sucesso';
+				mensagem = 'Evento salvo com sucesso';
 				sucesso = true;
 			} else {
 				mensagem = erro;
@@ -94,7 +116,10 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 				keyboardType: teclado,
 				decoration: InputDecoration(
 					labelText: label,
-					prefixIcon: Icon(icone, color: Colors.blue.shade700),
+					prefixIcon: Icon(
+						icone,
+						color: Colors.pink.shade700,
+					),
 					filled: true,
 					fillColor: Colors.white.withOpacity(0.72),
 					border: OutlineInputBorder(
@@ -113,7 +138,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 				children: [
 					Positioned.fill(
 						child: Image.asset(
-							'assets/fundo_veiculo.jpg',
+							'assets/fundo_evento.jpg',
 							fit: BoxFit.cover,
 						),
 					),
@@ -146,13 +171,13 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 									child: Column(
 										children: [
 											const Icon(
-												Icons.directions_car_rounded,
+												Icons.event_rounded,
 												size: 58,
-												color: Color(0xFF1565C0),
+												color: Color(0xFFC2185B),
 											),
 											const SizedBox(height: 10),
 											const Text(
-												'Cadastro de Veículo',
+												'Cadastro de Evento',
 												style: TextStyle(
 													fontSize: 26,
 													fontWeight: FontWeight.bold,
@@ -161,32 +186,32 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 											),
 											const SizedBox(height: 22),
 											campo(
-												'Marca',
-												Icons.branding_watermark,
-												marcaController,
+												'Nome do evento',
+												Icons.event,
+												nomeController,
 											),
 											campo(
-												'Modelo',
-												Icons.directions_car,
-												modeloController,
-											),
-											campo(
-												'Ano',
-												Icons.calendar_today,
-												anoController,
+												'Quantidade mínima',
+												Icons.group_outlined,
+												quantidadeMinController,
 												teclado: TextInputType.number,
 											),
 											campo(
-												'Preço',
+												'Quantidade máxima',
+												Icons.groups_outlined,
+												quantidadeMaxController,
+												teclado: TextInputType.number,
+											),
+											campo(
+												'Valor do ingresso',
 												Icons.attach_money,
-												precoController,
+												valorController,
 												teclado:
 													const TextInputType
 														.numberWithOptions(
 													decimal: true,
 												),
 											),
-											const SizedBox(height: 5),
 											SizedBox(
 												width: double.infinity,
 												height: 52,
@@ -196,7 +221,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 														Icons.save_rounded,
 													),
 													label: const Text(
-														'Salvar veículo',
+														'Salvar evento',
 														style: TextStyle(
 															fontSize: 16,
 															fontWeight:
@@ -206,7 +231,7 @@ class _CadastroVeiculoState extends State<CadastroVeiculo> {
 													style: ElevatedButton.styleFrom(
 														backgroundColor:
 															const Color(
-																0xFF1565C0,
+																0xFFC2185B,
 															),
 														foregroundColor:
 															Colors.white,
