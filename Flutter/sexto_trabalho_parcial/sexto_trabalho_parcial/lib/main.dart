@@ -58,14 +58,14 @@ class MenuPrincipal extends StatelessWidget {
 					child: Container(
 						padding: const EdgeInsets.all(16),
 						decoration: BoxDecoration(
-							color: Colors.white.withOpacity(0.88),
+							color: Colors.white.withValues(alpha: 0.88),
 							borderRadius: BorderRadius.circular(18),
 							border: Border.all(
-								color: Colors.white.withOpacity(0.7),
+								color: Colors.white.withValues(alpha: 0.7),
 							),
 							boxShadow: [
 								BoxShadow(
-									color: Colors.black.withOpacity(0.18),
+									color: Colors.black.withValues(alpha: 0.18),
 									blurRadius: 10,
 									offset: const Offset(0, 5),
 								),
@@ -77,7 +77,7 @@ class MenuPrincipal extends StatelessWidget {
 									width: 52,
 									height: 52,
 									decoration: BoxDecoration(
-										color: cor.withOpacity(0.15),
+										color: cor.withValues(alpha: 0.15),
 										borderRadius:
 											BorderRadius.circular(14),
 									),
@@ -138,7 +138,7 @@ class MenuPrincipal extends StatelessWidget {
 					),
 					Positioned.fill(
 						child: Container(
-							color: Colors.black.withOpacity(0.32),
+							color: Colors.black.withValues(alpha: 0.32),
 						),
 					),
 					SafeArea(
@@ -150,17 +150,17 @@ class MenuPrincipal extends StatelessWidget {
 										const BoxConstraints(maxWidth: 600),
 									padding: const EdgeInsets.all(25),
 									decoration: BoxDecoration(
-										color: Colors.white.withOpacity(0.82),
+										color: Colors.white.withValues(alpha: 0.82),
 										borderRadius:
 											BorderRadius.circular(24),
 										border: Border.all(
 											color:
-												Colors.white.withOpacity(0.65),
+												Colors.white.withValues(alpha: 0.65),
 										),
 										boxShadow: [
 											BoxShadow(
 												color: Colors.black
-													.withOpacity(0.25),
+													.withValues(alpha: 0.25),
 												blurRadius: 20,
 												offset: const Offset(0, 10),
 											),
@@ -173,7 +173,7 @@ class MenuPrincipal extends StatelessWidget {
 												height: 80,
 												decoration: BoxDecoration(
 													color: Colors.indigo
-														.withOpacity(0.14),
+														.withValues(alpha: 0.14),
 													shape: BoxShape.circle,
 												),
 												child: const Icon(

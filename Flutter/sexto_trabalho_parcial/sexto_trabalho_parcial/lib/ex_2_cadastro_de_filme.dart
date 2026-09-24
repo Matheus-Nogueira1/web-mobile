@@ -79,7 +79,7 @@ class _CadastroFilmeState extends State<CadastroFilme> {
 						color: Colors.deepPurple.shade700,
 					),
 					filled: true,
-					fillColor: Colors.white.withOpacity(0.72),
+					fillColor: Colors.white.withValues(alpha: 0.72),
 					border: OutlineInputBorder(
 						borderRadius: BorderRadius.circular(14),
 						borderSide: BorderSide.none,
@@ -102,7 +102,7 @@ class _CadastroFilmeState extends State<CadastroFilme> {
 					),
 					Positioned.fill(
 						child: Container(
-							color: Colors.black.withOpacity(0.35),
+							color: Colors.black.withValues(alpha: 0.35),
 						),
 					),
 					SafeArea(
@@ -114,13 +114,13 @@ class _CadastroFilmeState extends State<CadastroFilme> {
 										const BoxConstraints(maxWidth: 550),
 									padding: const EdgeInsets.all(24),
 									decoration: BoxDecoration(
-										color: Colors.white.withOpacity(0.82),
+										color: Colors.white.withValues(alpha: 0.82),
 										borderRadius:
 											BorderRadius.circular(22),
 										boxShadow: [
 											BoxShadow(
 												color: Colors.black
-													.withOpacity(0.22),
+													.withValues(alpha: 0.22),
 												blurRadius: 18,
 												offset: const Offset(0, 8),
 											),
