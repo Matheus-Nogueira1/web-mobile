@@ -15,6 +15,7 @@ dependencies:
   all_br_forms: ^1.0.1
   all_br_validations: ^1.0.3
 
+  material_ui: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
